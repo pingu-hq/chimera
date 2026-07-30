@@ -1,3 +1,7 @@
+# arch=arm64
+# bits=64
+# generated=2026-07-30T09:31:47Z
+
 0 io_setup
 1 io_destroy
 2 io_submit
