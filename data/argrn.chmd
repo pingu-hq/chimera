@@ -1,10 +1,10 @@
 -t>sARN
 filename=path
 pathname=path
-oldname=path
-newname=path
-oldpath=path
-newpath=path
+oldname=oldname
+newname=newname
+oldpath=oldpath
+newpath=newpath
 target=path
 linkpath=path
 from=path
