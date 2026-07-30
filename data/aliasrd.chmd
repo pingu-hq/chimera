@@ -1,0 +1,7 @@
+-t>sRD
+eventfd2=eventfd
+futex_requeue=futex
+futex_wait=futex
+futex_wake=futex
+futex_waitv=futex
+fcntl64=fcntl
