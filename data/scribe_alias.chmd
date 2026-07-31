@@ -1,4 +1,4 @@
--t>sRD
+-t>scr_alia
 eventfd2=eventfd
 futex_requeue=futex
 futex_wait=futex
