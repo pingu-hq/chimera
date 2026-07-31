@@ -32,11 +32,15 @@ fn help() {
   {green}conjure{reset} <policy.chmp> <root>
       create a sandbox from a policy
 
+  {green}embroider{reset} <policy.chmp>
+      compile a policy into Rust source
+
   {green}help{reset}
       display this page
 
 {white}{bold}examples{reset}
   {green}chimera conjure sandbox.chmp /srv/rootfs{reset}
+  {green}chimera embroider sandbox.chmp{reset}
   {green}chimera help{reset}
 
 {dim}pingu chimera v0.1.0{reset}
@@ -61,6 +65,16 @@ fn main() {
         Some("help") => {
             help();
         }
+        Some("embroider") => match args.next().as_deref() {
+            Some(path) => match chimera::embroider::compile(path) {
+                Ok(code) => print!("{code}"),
+                Err(e) => {
+                    eprintln!("{CYAN}{BOLD}[chimera]{RESET} embroider: {e}");
+                    std::process::exit(1);
+                }
+            },
+            None => eprintln!("{CYAN}{BOLD}[chimera]{RESET} policy file (*.chmp) required"),
+        },
         Some("conjure") => match args.next().as_deref() {
             Some(policy) => {
                 if let Some(root) = args.next().as_deref() {
