@@ -7,13 +7,16 @@ chmd="data/syscalls.chmd"
 # extract
 # =========
 
+log() { echo "[chimera] $*" >&2; }
+
 extract_args() {
     name="$1"
     rn="$2"
 
+    log "extract_args: $name"
     man 2 "$name" 2>/dev/null | col -b |
     awk -v name="$name" '
-    NR == FNR && /^[^-]/ {
+    NR == FNR && /^[^-#]/ {
         split($0, a, "=")
         R[a[1]] = a[2]
         next
@@ -165,7 +168,7 @@ extract_args() {
                 if (result == "") result = parse_params(params)
             }
         }
-        if (result != "") print result
+        if (result != "") print result; else print "[chimera] no match" > "/dev/stderr"
     }
     ' "$rn" -
 }
@@ -174,18 +177,20 @@ extract_args() {
 # main
 # =========
 
-echo "-t>nmargs" > "$chmd"
+echo "-t>sysdata" > "$chmd"
 
-grep -vh '^#' arm64/syscall_64.dat x86/syscall_64.dat \
-         arm64/syscall_32.dat x86/syscall_32.dat \
-| awk '{print $2}' | sort -u | while read -r name; do
-    args=$(extract_args "$name" data/argrn.chmd)
+grep -vhE '^(#|-t>|$)' data/arm64/syscall_64.chmd data/x86/syscall_64.chmd \
+         data/arm64/syscall_32.chmd data/x86/syscall_32.chmd \
+ | awk '{print $2}' | sort -u | while read -r name; do
+    log "processing: $name"
+    args=$(extract_args "$name" data/scribe_arg.chmd)
 
     # fallback: strip trailing digits (handles 2,32,64 compat variants)
     if [ -z "$args" ]; then
         trimmed=$(echo "$name" | sed 's/[0-9][0-9]*$//')
         if [ -n "$trimmed" ] && [ "$trimmed" != "$name" ]; then
-            args=$(extract_args "$trimmed" data/argrn.chmd)
+            log "  fallback digits: $name -> $trimmed"
+            args=$(extract_args "$trimmed" data/scribe_arg.chmd)
         fi
     fi
 
@@ -193,19 +198,24 @@ grep -vh '^#' arm64/syscall_64.dat x86/syscall_64.dat \
     if [ -z "$args" ]; then
         trimmed=$(echo "$name" | sed 's/_time64$//')
         if [ -n "$trimmed" ] && [ "$trimmed" != "$name" ]; then
-            args=$(extract_args "$trimmed" data/argrn.chmd)
+            log "  fallback time64: $name -> $trimmed"
+            args=$(extract_args "$trimmed" data/scribe_arg.chmd)
         fi
     fi
 
     # fallback: alias redirect
     if [ -z "$args" ]; then
-        mapped=$(awk -F= -v n="$name" '!/^-t>/ && $1 == n {print $2; exit}' data/aliasrd.chmd)
+        mapped=$(awk -F= -v n="$name" '!/^[#-]/ && $1 == n {print $2; exit}' data/scribe_alias.chmd)
         if [ -n "$mapped" ]; then
-            args=$(extract_args "$mapped" data/argrn.chmd)
+            log "  fallback alias: $name -> $mapped"
+            args=$(extract_args "$mapped" data/scribe_arg.chmd)
         fi
     fi
 
     if [ -n "$args" ]; then
+        log "  result: $args"
         echo "$name: $args" >> "$chmd"
+    else
+        log "  no args found"
     fi
 done

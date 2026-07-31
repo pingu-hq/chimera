@@ -1,8 +1,8 @@
 -t>sARN
 filename=path
 pathname=path
-oldname=oldname
-newname=newname
+oldname=oldpath
+newname=newpath
 oldpath=oldpath
 newpath=newpath
 target=path

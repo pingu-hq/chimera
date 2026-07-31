@@ -4,52 +4,56 @@
 # setup
 # =========
 
-mkdir -p x86 arm64
+mkdir -p data/x86 data/arm64
 
 # =========
 # x86/...
 # =========
 
-[ ! -e "x86/syscall_64.tbl" ] && wget "https://raw.githubusercontent.com/torvalds/linux/refs/heads/master/arch/x86/entry/syscalls/syscall_64.tbl" -O x86/syscall_64.tbl
+[ ! -e "data/x86/syscall_64.tbl" ] && wget "https://raw.githubusercontent.com/torvalds/linux/refs/heads/master/arch/x86/entry/syscalls/syscall_64.tbl" -O data/x86/syscall_64.tbl
 
-[ ! -e "x86/syscall_32.tbl" ] && wget "https://raw.githubusercontent.com/torvalds/linux/refs/heads/master/arch/x86/entry/syscalls/syscall_32.tbl" -O x86/syscall_32.tbl
+[ ! -e "data/x86/syscall_32.tbl" ] && wget "https://raw.githubusercontent.com/torvalds/linux/refs/heads/master/arch/x86/entry/syscalls/syscall_32.tbl" -O data/x86/syscall_32.tbl
 
 # ==========
 # arm64/...
 # ==========
 
-[ ! -e "arm64/syscall_32.tbl" ] && wget "https://raw.githubusercontent.com/torvalds/linux/refs/heads/master/arch/arm64/tools/syscall_32.tbl" -O arm64/syscall_32.tbl
+[ ! -e "data/arm64/syscall_32.tbl" ] && wget "https://raw.githubusercontent.com/torvalds/linux/refs/heads/master/arch/arm64/tools/syscall_32.tbl" -O data/arm64/syscall_32.tbl
 
-[ ! -e "arm64/syscall_64.tbl" ] && wget "https://raw.githubusercontent.com/torvalds/linux/refs/heads/master/scripts/syscall.tbl" -O arm64/syscall_64.tbl
+[ ! -e "data/arm64/syscall_64.tbl" ] && wget "https://raw.githubusercontent.com/torvalds/linux/refs/heads/master/scripts/syscall.tbl" -O data/arm64/syscall_64.tbl
 
 # ==========
 # embroidery
 # ==========
 
-echo "[patchwork_sysc.sh] patching x86/syscall_32.tbl"
-echo "# arch=x86" > x86/syscall_32.dat
-echo "# bits=32" >> x86/syscall_32.dat
-echo "# generated=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> x86/syscall_32.dat
-echo >> x86/syscall_32.dat
-./sysc_numgrab.sh x86/syscall_32.tbl i386 >> x86/syscall_32.dat
+echo "[embroider_sysc.sh] patching data/x86/syscall_32.tbl"
+echo "-t>archdt" > data/x86/syscall_32.chmd
+echo "# arch=x86" >> data/x86/syscall_32.chmd
+echo "# bits=32" >> data/x86/syscall_32.chmd
+echo "# generated=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> data/x86/syscall_32.chmd
+echo >> data/x86/syscall_32.chmd
+./sysc_textile.sh data/x86/syscall_32.tbl i386 >> data/x86/syscall_32.chmd
 
-echo "[patchwork_sysc.sh] patching x86/syscall_64.tbl"
-echo "# arch=x86_64" > x86/syscall_64.dat
-echo "# bits=64" >> x86/syscall_64.dat
-echo "# generated=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> x86/syscall_64.dat
-echo >> x86/syscall_64.dat
-./sysc_numgrab.sh x86/syscall_64.tbl common,64 >> x86/syscall_64.dat
+echo "[embroider_sysc.sh] patching data/x86/syscall_64.tbl"
+echo "-t>archdt" > data/x86/syscall_64.chmd
+echo "# arch=x86_64" >> data/x86/syscall_64.chmd
+echo "# bits=64" >> data/x86/syscall_64.chmd
+echo "# generated=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> data/x86/syscall_64.chmd
+echo >> data/x86/syscall_64.chmd
+./sysc_textile.sh data/x86/syscall_64.tbl common,64 >> data/x86/syscall_64.chmd
 
-echo "[patchwork_sysc.sh] patching arm64/syscall_32.tbl"
-echo "# arch=arm64" > arm64/syscall_32.dat
-echo "# bits=32" >> arm64/syscall_32.dat
-echo "# generated=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> arm64/syscall_32.dat
-echo >> arm64/syscall_32.dat
-./sysc_numgrab.sh arm64/syscall_32.tbl common >> arm64/syscall_32.dat
+echo "[embroider_sysc.sh] patching data/arm64/syscall_32.tbl"
+echo "-t>archdt" > data/arm64/syscall_32.chmd
+echo "# arch=arm64" >> data/arm64/syscall_32.chmd
+echo "# bits=32" >> data/arm64/syscall_32.chmd
+echo "# generated=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> data/arm64/syscall_32.chmd
+echo >> data/arm64/syscall_32.chmd
+./sysc_textile.sh data/arm64/syscall_32.tbl common >> data/arm64/syscall_32.chmd
 
-echo "[patchwork_sysc.sh] patching arm64/syscall_64.tbl"
-echo "# arch=arm64" > arm64/syscall_64.dat
-echo "# bits=64" >> arm64/syscall_64.dat
-echo "# generated=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> arm64/syscall_64.dat
-echo >> arm64/syscall_64.dat
-./sysc_numgrab.sh arm64/syscall_64.tbl common,64 >> arm64/syscall_64.dat
+echo "[embroider_sysc.sh] patching data/arm64/syscall_64.tbl"
+echo "-t>archdt" > data/arm64/syscall_64.chmd
+echo "# arch=arm64" >> data/arm64/syscall_64.chmd
+echo "# bits=64" >> data/arm64/syscall_64.chmd
+echo "# generated=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> data/arm64/syscall_64.chmd
+echo >> data/arm64/syscall_64.chmd
+./sysc_textile.sh data/arm64/syscall_64.tbl common,64 >> data/arm64/syscall_64.chmd
