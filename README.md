@@ -1,11 +1,11 @@
 # chimera
 
-**declarative syscall policy engine for Linux.**
+**declarative syscall policy engine for Linux**
 
-chimera is a proot-like sandbox built on seccomp user notifications. You write a
+chimera is a proot-like sandbox built on seccomp user notifications. you write a
 small `.chmp` policy describing how syscalls should be rewritten and answered;
 chimera traps the syscalls, runs your policy on each one, and emulates the ones
-you modify. No `chroot`, mounts, or namespaces are required.
+you modify. no `chroot`, mounts, or namespaces are required.
 
 ```text
 -t>
@@ -53,10 +53,10 @@ chimera conjure example.chmp /srv/rootfs /bin/sh
 
 ## docs
 
-* [Introduction](./docs/INTRODUCTION.md) - what chimera is and how it works
-* [Install](./docs/INSTALL.md) - install the latest release
-* [Usage](./docs/USAGE.md) - the `chimera` command line
-* [Policy](./docs/POLICY.md) - the `.chmp` policy language reference
+* [introduction](./docs/INTRODUCTION.md) - what chimera is and how it works
+* [install](./docs/INSTALL.md) - install the latest release
+* [usage](./docs/USAGE.md) - the `chimera` command line
+* [policy](./docs/POLICY.md) - the `.chmp` policy language reference
 
 ## layout
 
