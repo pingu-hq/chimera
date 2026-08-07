@@ -1,3 +1,8 @@
+[workspace]
+members = ["chi"]
+default-members = [".", "chi"]
+resolver = "3"
+
 [package]
 name = "chimera"
 version = "0.1.0"
@@ -5,4 +10,13 @@ edition = "2024"
 
 [dependencies]
 libc = "0.2"
-regex = "1"
+
+[profile.release]
+opt-level = "z"     # optimize for size
+lto = true          # enable link-time optimization
+codegen-units = 1   # maximize optimization scope
+panic = "abort"     # remove unwinding landing pads
+strip = "symbols"    # strip release symbols
+
+[profile.dev]
+panic = "abort"     # allow the no_std chi binary to build by default

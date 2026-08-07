@@ -202,6 +202,7 @@ nice: inc
 open: path,flags,mode
 openat: dirfd,path,flags,mode
 openat2: dirfd,path,how,length
+newfstatat: dirfd,path,stat,flags
 open_by_handle_at: mount_fd,handle,flags
 open_tree: dirfd,path,flags
 open_tree_attr: dirfd,path,flags,attr,length
@@ -287,6 +288,20 @@ sendmsg: fd,msg,flags
 sendto: fd,buffer,length,flags,dest_addr,address_length
 setdomainname: name,length
 setfsgid: fsgid
+getdomainname: buffer,length
+getgid: 
+getgid32: 
+getegid: 
+getegid32: 
+geteuid: 
+geteuid32: 
+getuid: 
+getuid32: 
+gethostname: buffer,length
+getpid: 
+getppid: 
+gettid: 
+setfsgid: fsgid
 setfsgid32: fsgid
 setfsuid: fsuid
 setfsuid32: fsuid
@@ -294,6 +309,10 @@ setgid: gid
 setgid32: gid
 setgroups: length,list
 setgroups32: length,list
+setegid: gid
+setegid32: gid
+seteuid: uid
+seteuid32: uid
 sethostname: name,length
 setitimer: which,new_value,old_value
 set_mempolicy: mode,nodemask,maxnode
@@ -344,8 +363,8 @@ statx: dirfd,path,flags,mask,stat
 stime: t
 swapoff: path
 swapon: path,swapflags
-symlink: path,path
-symlinkat: path,newdirfd,path
+symlink: target,linkpath
+symlinkat: target,newdirfd,linkpath
 sync_file_range: fd,offset,length,flags
 syncfs: fd
 _sysctl: args

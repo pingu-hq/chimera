@@ -9,7 +9,12 @@ pub enum Tok {
     RParen,
     Comma,
     Eq,
+    EqEq,
     Pipe,
+    Minus,
+    At,
+    /// `-t>` metadata section delimiter (both open and close).
+    Meta,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -59,11 +64,30 @@ pub fn tokenize(src: &str) -> Result<Vec<Token>, String> {
                 i += 1;
             }
             '=' => {
-                toks.push(Token { tok: Tok::Eq, line });
-                i += 1;
+                if chars.get(i + 1) == Some(&'=') {
+                    toks.push(Token { tok: Tok::EqEq, line });
+                    i += 2;
+                } else {
+                    toks.push(Token { tok: Tok::Eq, line });
+                    i += 1;
+                }
             }
             '|' => {
                 toks.push(Token { tok: Tok::Pipe, line });
+                i += 1;
+            }
+            '-' => {
+                // `-t>` opens/closes a metadata section; a bare '-' is minus.
+                if chars.get(i + 1) == Some(&'t') && chars.get(i + 2) == Some(&'>') {
+                    toks.push(Token { tok: Tok::Meta, line });
+                    i += 3;
+                } else {
+                    toks.push(Token { tok: Tok::Minus, line });
+                    i += 1;
+                }
+            }
+            '@' => {
+                toks.push(Token { tok: Tok::At, line });
                 i += 1;
             }
             '"' => {

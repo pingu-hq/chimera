@@ -21,25 +21,25 @@ accepted="$2"
 # extraction
 # =========
 #
-# Extract syscall numbers and names from a Linux syscall table.
+# extract syscall numbers and names from a linux syscall table.
 #
-# Output format:
+# output format:
 #
 #   <number> <name>
 #
-# The accepted ABI list is a comma-separated string (e.g. "common,64").
+# the accepted abi list is a comma-separated string (e.g. "common,64").
 #
 
 awk -v accepted="$accepted" '
 BEGIN {
-    # Split the accepted ABI list into a lookup table.
+    # split the accepted abi list into a lookup table.
     n = split(accepted, abi_list, ",")
 
     for (i = 1; i <= n; i++)
         abi_ok[abi_list[i]] = 1
 }
 
-# Ignore comments and blank lines.
+# ignore comments and blank lines.
 !/^[0-9]/ {
     next
 }

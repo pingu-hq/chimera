@@ -1,0 +1,12 @@
+[package]
+name = "chi"
+version = "0.1.0"
+edition = "2021"
+description = "Seccomp-notify trampoline for chimera (no_std, rustix + raw syscalls only)"
+
+[[bin]]
+name = "chi"
+path = "src/main.rs"
+
+[dependencies]
+rustix = { version = "1.1.2", default-features = false, features = ["process", "fs"] }

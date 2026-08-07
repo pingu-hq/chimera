@@ -1,0 +1,8 @@
+[build]
+target = "x86_64-unknown-linux-musl"
+
+[target.x86_64-unknown-linux-musl]
+linker = "musl-gcc"
+
+[unstable]
+build-std = ["std", "panic_abort"]

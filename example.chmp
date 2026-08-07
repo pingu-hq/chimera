@@ -1,0 +1,149 @@
+# ==========================================
+# example.chmp - chimera policy (api v2)
+# ==========================================
+#
+# proot-like. binds and root mapping are
+# applied to every path-touching syscall.
+
+-t>
+name = example
+version = 2
+xattr = yes
+arch = x86_64
+-t>
+
+on_startup {
+    bind("/proc", "/proc")
+    bind("/sys", "/sys")
+    bind("/dev", "/dev")
+    bind("/etc/resolv.conf", "/etc/resolv.conf")
+}
+
+
+group filesystem {
+    open
+    openat
+    openat2
+    mknod
+    mknodat
+    read
+    write
+    close
+    stat
+    statx
+    newfstatat
+    access
+    faccessat
+    faccessat2
+    readlink
+    getdents64
+    lseek
+    statfs
+    fstatfs
+    getxattr
+    lgetxattr
+    setxattr
+    lsetxattr
+    removexattr
+    lremovexattr
+    listxattr
+    llistxattr
+}
+
+
+group directories {
+    chdir
+    fchdir
+    getcwd
+    mkdir
+    mkdirat
+    rmdir
+    unlink
+    unlinkat
+    rename
+    renameat
+    renameat2
+    link
+    linkat
+    symlink
+    symlinkat
+}
+
+
+group metadata {
+    chmod
+    fchmod
+    fchmodat
+    fchmodat2
+    chown
+    lchown
+    fchown
+    fchownat
+    truncate
+    ftruncate
+    utimensat
+    utime
+    utimes
+}
+
+
+group process {
+    clone
+    fork
+    execve
+    exit
+    exit_group
+    wait4
+}
+
+
+group networking {
+    socket
+    connect
+    bind
+    listen
+}
+
+
+group identity {
+    getuid
+    geteuid
+    getgid
+    getegid
+    getresuid
+    getresgid
+    setuid
+    setgid
+    setreuid
+    setregid
+    setresuid
+    setresgid
+    setgroups
+    getgroups
+}
+
+
+group everything {
+    @filesystem
+    @directories
+    @process
+    @networking
+    @identity
+    @metadata
+}
+
+
+handle filesystem {
+    path = map_path(root, path)
+    allow
+}
+
+
+handle directories {
+    allow
+}
+
+
+handle metadata {
+    allow
+}
